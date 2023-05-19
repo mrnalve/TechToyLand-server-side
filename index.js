@@ -33,15 +33,22 @@ async function run() {
     const haiku = database.collection("haiku");
     const techToyCollection = client.db('TechToy').collection('Tech')
     // post data 
-    app.post('/addTechToy', async(req,res)=>{
-        const techToyCard = req.body
-        const result = await techToyCollection.insertOne(techToyCard)
-        res.send(result)
+    app.post('/addTechToy', async (req, res) => {
+      const techToyCard = req.body
+      const result = await techToyCollection.insertOne(techToyCard)
+      res.send(result)
     })
     // get all data 
-    app.get('/addTechToy', async(req,res)=>{
-        const result = await techToyCollection.find().toArray()
-        res.send(result)
+    app.get('/addTechToy', async (req, res) => {
+      const result = await techToyCollection.find().toArray()
+      res.send(result)
+    })
+    // get only my job data
+    app.get("/myToys/:email", async (req, res) => {
+      const result = await techToyCollection.find({
+        sellerEmail: req.params.email
+      }).toArray()
+      res.send(result)
     })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -55,9 +62,9 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+  res.send('Hello World!')
 })
 
 app.listen(port, () => {
-    console.log(`TechToy server running on the port: ${port}`)
+  console.log(`TechToy server running on the port: ${port}`)
 })
