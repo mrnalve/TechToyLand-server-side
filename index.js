@@ -57,6 +57,14 @@ async function run() {
       }).toArray()
       res.send(result)
     })
+    // get toys data by searching 
+    app.get('/getToysByText/:text', async (req, res) => {
+      const text = req.params.text
+      const result = await techToyCollection.find({
+        productName: { $regex: text, $options: "i" }
+      }).toArray()
+      res.send(result)
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
