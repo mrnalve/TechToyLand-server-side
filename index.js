@@ -44,9 +44,9 @@ async function run() {
       res.send(result)
     })
     // get single data 
-    app.get('/toysDetails/:id', async(req, res)=>{
+    app.get('/toysDetails/:id', async (req, res) => {
       const id = req.params.id
-      const query = {_id: new ObjectId(id)}
+      const query = { _id: new ObjectId(id) }
       const result = await techToyCollection.find(query).toArray()
       res.send(result)
     })
@@ -70,6 +70,22 @@ async function run() {
       const result = await techToyCollection.find({
         productName: { $regex: text, $options: "i" }
       }).toArray()
+      res.send(result)
+    })
+    // update single toys
+    app.put('/updateToys/:id', async (req, res) => {
+      const id = req.params.id
+      const body = req.body
+      const filter = { _id: new ObjectId(id) }
+      const updateDoc = {
+        $set: {
+          price: body.price,
+          quantity: body.quantity,
+          description: body.description
+
+        }
+      }
+      const result = await techToyCollection.updateOne(filter, updateDoc)
       res.send(result)
     })
     // Send a ping to confirm a successful connection
