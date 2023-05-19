@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5000;
 require('dotenv').config()
 // middleware
@@ -40,7 +40,14 @@ async function run() {
     })
     // get all data 
     app.get('/addTechToy', async (req, res) => {
-      const result = await techToyCollection.find().toArray()
+      const result = await techToyCollection.find().limit(20).toArray()
+      res.send(result)
+    })
+    // get single data 
+    app.get('/toysDetails/:id', async(req, res)=>{
+      const id = req.params.id
+      const query = {_id: new ObjectId(id)}
+      const result = await techToyCollection.find(query).toArray()
       res.send(result)
     })
     // get only my job data
