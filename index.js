@@ -75,17 +75,24 @@ async function run() {
     // update single toys
     app.put('/updateToys/:id', async (req, res) => {
       const id = req.params.id
-      const body = req.body
+      const updateToys = req.body
       const filter = { _id: new ObjectId(id) }
       const updateDoc = {
         $set: {
-          price: body.price,
-          quantity: body.quantity,
-          description: body.description
+          price: updateToys.price,
+          quantity: updateToys.quantity,
+          description: updateToys.description
 
         }
       }
       const result = await techToyCollection.updateOne(filter, updateDoc)
+      res.send(result)
+    })
+    // delete toys
+    app.delete('/deleteToys/:id', async(req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await techToyCollection.deleteOne(query)
       res.send(result)
     })
     // Send a ping to confirm a successful connection
