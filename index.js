@@ -28,14 +28,25 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
     const database = client.db("insertDB");
     const haiku = database.collection("haiku");
     const techToyCollection = client.db('TechToy').collection('Tech')
+    const reviewCollection = client.db('TechToy').collection('Reviews')
     // post data 
     app.post('/addTechToy', async (req, res) => {
       const techToyCard = req.body
       const result = await techToyCollection.insertOne(techToyCard)
+      res.send(result)
+    })
+    // post review data
+    app.post('/review', async(req, res)=>{
+      const reviews = req.body;
+      console.log(reviews); 
+      const result = await reviewCollection.insertOne(reviews)
+      res.send(result)
+    })
+    app.get('/review', async (req, res) => {
+      const result = await reviewCollection.find().toArray()
       res.send(result)
     })
     // get all data 
