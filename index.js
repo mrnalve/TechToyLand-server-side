@@ -72,6 +72,19 @@ async function run() {
       }).toArray()
       res.send(result)
     })
+    // get data Ascending Descending Order based on price
+    app.get('/sortingByPrice', async (req, res) => {
+      const sort = req.query.sort
+      const email = req.query.email
+      let sorting;
+      if (sort === 'asc') {
+        sorting = 1
+      } else if (sort === 'desc') {
+        sorting = -1
+      }
+      const result = await techToyCollection.find({sellerEmail: email}).sort({ price: sorting}).toArray();
+      res.send(result)
+    })
     // update single toys
     app.put('/updateToys/:id', async (req, res) => {
       const id = req.params.id
@@ -89,9 +102,9 @@ async function run() {
       res.send(result)
     })
     // delete toys
-    app.delete('/deleteToys/:id', async(req,res)=>{
+    app.delete('/deleteToys/:id', async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)}
+      const query = { _id: new ObjectId(id) }
       const result = await techToyCollection.deleteOne(query)
       res.send(result)
     })
